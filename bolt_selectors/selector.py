@@ -14,7 +14,7 @@ def union_single(field: str, op: str):
     def err(a, b):
         if a == b:
             return a
-        
+
         raise ValueError(OP_ERROR.format(op, field))
 
     return err
@@ -40,7 +40,7 @@ def union_range(field: str):
             return (None, max(a[1], b[1]))
         elif b[0] is None and a[0] is not None:
             return (None, max(a[1], b[1]))
-        
+
         # One of the ranges has no upper bound
         # Return the no upper bound and the min lower bound
         if a[1] is None and b[1] is not None:
@@ -58,7 +58,7 @@ def union_range(field: str):
         elif b[0] > a[1]:
             raise ValueError(f"Cannot '|' between {field}s with no overlap")
 
-        # At least one bound is overlapping, 
+        # At least one bound is overlapping,
         # so take the min lower and max upper
         min_bound = min(a[0], b[0])
         max_bound = max(a[1], b[1])
@@ -67,12 +67,17 @@ def union_range(field: str):
 
     return union
 
-def union_scores(a: dict[str, ExactOrRangeArgument[int]], b: dict[str, ExactOrRangeArgument[int]]):
+
+def union_scores(
+    a: dict[str, ExactOrRangeArgument[int]], b: dict[str, ExactOrRangeArgument[int]]
+):
     new_scores = {}
 
     for objective in a:
         if objective in b:
-            new_scores[objective] = union_range("scores." + objective)(a[objective], b[objective])
+            new_scores[objective] = union_range("scores." + objective)(
+                a[objective], b[objective]
+            )
         else:
             new_scores[objective] = a[objective]
 
@@ -83,7 +88,8 @@ def union_scores(a: dict[str, ExactOrRangeArgument[int]], b: dict[str, ExactOrRa
 
     return new_scores
 
-def union_advancements(a: dict[str, bool|dict[str]], b: dict[str, bool|dict[str]]):
+
+def union_advancements(a: dict[str, bool | dict[str]], b: dict[str, bool | dict[str]]):
     new_advancements = {}
 
     for path in a:
@@ -95,7 +101,9 @@ def union_advancements(a: dict[str, bool|dict[str]], b: dict[str, bool|dict[str]
             elif isinstance(a[path], bool) or isinstance(b[path], bool):
                 new_advancements[path] = a[path] or b[path]
             else:
-                raise ValueError(f"Cannot '|' between advancement.{path} with no overlap")
+                raise ValueError(
+                    f"Cannot '|' between advancement.{path} with no overlap"
+                )
         else:
             new_advancements[path] = a[path]
 
@@ -106,8 +114,10 @@ def union_advancements(a: dict[str, bool|dict[str]], b: dict[str, bool|dict[str]
 
     return new_advancements
 
+
 def union_negatable_set(a: set[NegatableArgument[T]], b: set[NegatableArgument[T]]):
     return a.union(b)
+
 
 FIELD_UNION = {
     "x": union_single("x", "|"),
@@ -130,7 +140,7 @@ FIELD_UNION = {
     "gamemodes": union_negatable_set,
     "advancements": union_advancements,
     "limit": union_single("limit", "|"),
-    "sort": union_single("sort", "|")
+    "sort": union_single("sort", "|"),
 }
 
 
