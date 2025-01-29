@@ -178,7 +178,7 @@ def selector_to_ast(selector: "Selector", node: AstNode):
         if isinstance(field_value, list):
             for entry in field_value:
                 args.append(selector_arg(field.name[:-1], factory(entry[1]), entry[0]))
-        else:
+        elif not isinstance(field_value, dict) or len(field_value.keys()) > 1:
             args.append(selector_arg(field.name, factory(field_value)))
 
     return set_location(

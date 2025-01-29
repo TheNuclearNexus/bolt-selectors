@@ -25,20 +25,24 @@ class Selector:
     x_rotation: Optional[ExactOrRangeArgument[int | float]] = extra_field(default=None)
     y_rotation: Optional[ExactOrRangeArgument[int | float]] = extra_field(default=None)
 
-    scores: Optional[dict[str, ExactOrRangeArgument[int]]] = extra_field(default=None)
-    tags: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
-    teams: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
+    scores: Optional[dict[str, ExactOrRangeArgument[int]]] = extra_field(
+        default_factory=dict
+    )
+    tags: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
+    teams: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
 
-    names: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
-    types: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
-    predicates: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
+    names: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
+    types: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
+    predicates: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
 
-    nbts: Optional[list[NegatableArgument[Compound]]] = extra_field(default=None)
+    nbts: Optional[list[NegatableArgument[Compound]]] = extra_field(
+        default_factory=list
+    )
 
     level: Optional[ExactOrRangeArgument[int]] = extra_field(default=None)
-    gamemodes: Optional[set[NegatableArgument[str]]] = extra_field(default=None)
+    gamemodes: Optional[set[NegatableArgument[str]]] = extra_field(default_factory=set)
     advancements: Optional[dict[str, bool | dict[str, bool]]] = extra_field(
-        default=None
+        default_factory=dict
     )
 
     limit: Optional[int] = extra_field(default=None)
