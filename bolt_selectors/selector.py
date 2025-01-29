@@ -313,6 +313,10 @@ class Selector:
         self.sort = sort
         return self
 
+    @property
+    def single_target(self) -> bool:
+        return self.variable == "n" or self.variable == "s" or self.limit == 1
+
     def __or__(self, other: Any):
         if not isinstance(other, Selector):
             raise ValueError(f"Cannot '|' between Selector and {type(other).__name__}")
