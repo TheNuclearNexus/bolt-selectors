@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.0 (2025-01-29)
+
+### Feature
+
+* Added `single_target` property to selectors ([`99e7f4e`](https://github.com/TheNuclearNexus/bolt-selectors/commit/99e7f4ec605ae4f7b22e2bb45d91c9c2d83ca9b1))
+* Selector unions ([`a5a4e53`](https://github.com/TheNuclearNexus/bolt-selectors/commit/a5a4e53b225f90c26610aba445737f6e3d25ba72))
+
+### Fix
+
+* Created test for selector combination ([`83ff136`](https://github.com/TheNuclearNexus/bolt-selectors/commit/83ff136d22503c2cda8df71edaf40e455492903c))
+
 ## v0.1.1 (2025-01-29)
 
 ### Fix
