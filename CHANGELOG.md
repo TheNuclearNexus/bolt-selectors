@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2025-01-29)
+
+### Fix
+
+* Made default values for list/set/dict use factory ([`699d142`](https://github.com/TheNuclearNexus/bolt-selectors/commit/699d1429864a1a2a76445ccd09e58f243f1de716))
+
 ## v0.1.0 (2025-01-29)
 
 ### Feature
