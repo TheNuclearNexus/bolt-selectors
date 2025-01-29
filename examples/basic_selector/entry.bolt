@@ -1,5 +1,3 @@
-from contextlib import contextmanager
-
 function test:foo:
     self = @s[
         x=0,
