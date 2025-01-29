@@ -170,7 +170,10 @@ def selector_to_ast(selector: "Selector", node: AstNode):
 
             factory = FIELD_TO_AST[field.name]
 
-            if isinstance(field_value, list) or isinstance(field_value, set):
+            if isinstance(field_value, set):
+                field_value = sorted(list(field_value), key=lambda e: e[1])
+
+            if isinstance(field_value, list):
                 for entry in field_value:
                     args.append(
                         selector_arg(field.name[:-1], factory(entry[1]), entry[0])
