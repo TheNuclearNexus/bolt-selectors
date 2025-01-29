@@ -1,4 +1,3 @@
-
 from dataclasses import fields
 from functools import partial
 from mecha import AstNode, AstSelector, AstSelectorArgument, AstString
@@ -27,6 +26,7 @@ from mecha.ast import (
     AstSelectorArgument,
     AstSelectorAdvancements,
 )
+
 
 def selector_arg(key: str, value: AstNode, inverted: bool = False):
     return AstSelectorArgument(
@@ -87,6 +87,7 @@ def parse_exact(node: AstNode, _: bool = False):
 
     return None
 
+
 def parse_scores(value: AstSelectorScores, _: bool = False):
     new_value = {}
     for score in value.scores:
@@ -106,8 +107,10 @@ def parse_advancements(value: AstSelectorAdvancements, _: bool = False):
 
     return new_value
 
-def parse_list_arg(value: AstNode, inverted: bool, factory = set):
+
+def parse_list_arg(value: AstNode, inverted: bool, factory=set):
     return factory([(inverted, parse_exact(value))])
+
 
 FIELD_TO_AST = {
     "x": AstNumber.from_value,
@@ -158,59 +161,56 @@ AST_TO_FIELD = {
 }
 
 
-
 def selector_to_ast(selector: "Selector", node: AstNode):
-        args = []
+    args = []
 
-        for field in fields(selector):
-            if (
-                field_value := getattr(selector, field.name)
-            ) is None or field.name == "variable":
-                continue
+    for field in fields(selector):
+        if (
+            field_value := getattr(selector, field.name)
+        ) is None or field.name == "variable":
+            continue
 
-            factory = FIELD_TO_AST[field.name]
+        factory = FIELD_TO_AST[field.name]
 
-            if isinstance(field_value, set):
-                field_value = sorted(list(field_value), key=lambda e: e[1])
+        if isinstance(field_value, set):
+            field_value = sorted(list(field_value), key=lambda e: e[1])
 
-            if isinstance(field_value, list):
-                for entry in field_value:
-                    args.append(
-                        selector_arg(field.name[:-1], factory(entry[1]), entry[0])
-                    )
-            else:
-                args.append(selector_arg(field.name, factory(field_value)))
+        if isinstance(field_value, list):
+            for entry in field_value:
+                args.append(selector_arg(field.name[:-1], factory(entry[1]), entry[0]))
+        else:
+            args.append(selector_arg(field.name, factory(field_value)))
 
-        return set_location(
-            AstSelector(variable=selector.variable, arguments=args),
-            node.location,
-            node.end_location,
-        )
+    return set_location(
+        AstSelector(variable=selector.variable, arguments=args),
+        node.location,
+        node.end_location,
+    )
+
 
 def ast_to_selector(selector: AstSelector):
-        arguments = {}
+    arguments = {}
 
-        for argument in selector.arguments:
-            key = argument.key.value
+    for argument in selector.arguments:
+        key = argument.key.value
 
-            converter = AST_TO_FIELD[key]
+        converter = AST_TO_FIELD[key]
 
-            value = converter(argument.value, argument.inverted)
+        value = converter(argument.value, argument.inverted)
 
-            if value is None:
-                continue
+        if value is None:
+            continue
 
-            # Map single names to their plural versions
-            if isinstance(value, set) or isinstance(value, list):
-                key += "s"
+        # Map single names to their plural versions
+        if isinstance(value, set) or isinstance(value, list):
+            key += "s"
 
-            # Combine matching arguments, overide single values
-            if key in arguments and isinstance(arguments[key], set):
-                arguments[key] = arguments[key].union(value)
-            elif key in arguments and isinstance(arguments[key], list):
-                arguments[key] += value
-            else:
-                arguments[key] = value
+        # Combine matching arguments, overide single values
+        if key in arguments and isinstance(arguments[key], set):
+            arguments[key] = arguments[key].union(value)
+        elif key in arguments and isinstance(arguments[key], list):
+            arguments[key] += value
+        else:
+            arguments[key] = value
 
-        return Selector(selector.variable, **arguments)
-        
+    return Selector(selector.variable, **arguments)

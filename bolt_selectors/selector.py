@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 from typing import Optional
 from beet.core.utils import extra_field
@@ -7,6 +6,7 @@ from nbtlib import Compound
 from .types import ExactOrRangeArgument, NegatableArgument, T, N
 
 __all__ = ["Selector"]
+
 
 @dataclass
 class Selector:
@@ -99,8 +99,10 @@ class Selector:
             self.scores[objective] = value
 
         return self
-    
-    def _toggle_value(self, value: T, state: bool | None, values: set[NegatableArgument[T]]) -> "Selector":
+
+    def _toggle_value(
+        self, value: T, state: bool | None, values: set[NegatableArgument[T]]
+    ) -> "Selector":
         if state is None:
             if (True, value) in values:
                 values.remove((True, value))
@@ -118,36 +120,40 @@ class Selector:
 
     def tag(self, tag: str, state: bool | None = False) -> "Selector":
         return self._toggle_value(tag, state, self.tags)
-        
+
     def team(self, team: str, state: bool | None = False) -> "Selector":
         return self._toggle_value(team, state, self.teams)
-   
+
     def name(self, name: str, state: bool | None = False) -> "Selector":
-        return self._toggle_value(name, state, self.names) 
+        return self._toggle_value(name, state, self.names)
 
     def type(self, type: str, state: bool | None = False) -> "Selector":
         return self._toggle_value(type, state, self.types)
-    
+
     def predicate(self, predicate: str, state: bool | None = False) -> "Selector":
         return self._toggle_value(predicate, state, self.predicates)
- 
+
     def nbt(self, nbt: Compound, state: bool | None = False) -> "Selector":
         return self._toggle_value(nbt, state, self.nbts)
-    
+
     def at_level(self, value: ExactOrRangeArgument[int] | None) -> "Selector":
         self.level = value
         return self
-    
+
     def gamemode(self, gamemode: str, state: bool | None = False) -> "Selector":
         return self._toggle_value(gamemode, state, self.gamemodes)
-    
-    def advancement(self, advancement: str, state: bool | dict[str, bool | None] | None) -> "Selector":
+
+    def advancement(
+        self, advancement: str, state: bool | dict[str, bool | None] | None
+    ) -> "Selector":
         if state is None:
             if advancement in self.advancements:
                 del self.advancements[advancement]
-            return self 
+            return self
 
-        if not (cur_value := self.advancements.get(advancement)) or (isinstance(state, bool) or isinstance(cur_value, bool)):
+        if not (cur_value := self.advancements.get(advancement)) or (
+            isinstance(state, bool) or isinstance(cur_value, bool)
+        ):
             self.advancements[advancement] = state
             return self
 
@@ -156,13 +162,13 @@ class Selector:
                 del cur_value[criteria]
             else:
                 cur_value[criteria] = new_state
-            
+
         return self
-    
-    def limit_to(self, limit: int|None) -> "Selector":
+
+    def limit_to(self, limit: int | None) -> "Selector":
         self.limit = limit
         return self
-    
+
     def sorted_by(self, sort: str | None) -> "Selector":
         self.sort = sort
         return self

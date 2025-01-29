@@ -42,11 +42,8 @@ NBT_GLOBALS = [
     ByteArray,
 ]
 
-__all__ = [
-    "SelectorConverter",
-    "SelectorParser",
-    "beet_default"
-]
+__all__ = ["SelectorConverter", "SelectorParser", "beet_default"]
+
 
 @dataclass
 class SelectorConverter:
@@ -81,7 +78,7 @@ class SelectorParser:
 def beet_default(ctx: Context):
     mc = ctx.inject(Mecha)
     runtime = ctx.inject(Runtime)
-    
+
     # Make Selector and NBT types globally available due to limitations with AstValue
     runtime.globals.update({"Selector": Selector})
     runtime.globals.update({t.__name__: t for t in NBT_GLOBALS})
