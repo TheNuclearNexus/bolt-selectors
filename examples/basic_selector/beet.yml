@@ -1,0 +1,17 @@
+
+data_pack:
+  load:
+    - src
+
+pipeline:
+  - mecha
+
+require:
+  - bolt
+  - bolt_selectors
+
+output: .build 
+
+meta:
+  bolt:
+    entrypoint: test:entry

@@ -1,0 +1,49 @@
+from contextlib import contextmanager
+
+function test:foo:
+    self = @s[
+    x=0,
+    y=0,
+    z=0,
+
+    distance=..1,
+
+    dx=1,
+    dy=1,
+    dz=1,
+
+    x_rotation=..90,
+    y_rotation=90..,
+
+    scores={foo=1,bar=..1,baz=1..},
+    tag=foo.bar.baz,
+    tag=!foo.baz.bar,
+    team=fooBar,
+
+    name=BazBarFoo,
+    type=zombie,
+    predicate=./foo,
+
+    nbt={Health:20f},
+
+    level=1..,
+    gamemode=!adventure,
+    gamemode=!survival,
+    advancements={
+        ./foo=true,
+        ./bar={baz=true}
+    },
+
+    limit=1,
+    sort=nearest,
+
+    ]
+    print(self)
+
+    give self stick
+    
+    self.limit_to(None)
+
+
+    give self diamond
+

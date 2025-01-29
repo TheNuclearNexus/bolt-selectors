@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "bolt-selectors"
+version = "0.0.0"
+description = "A library that allows selectors to be manipulated in a pythonic way"
+authors = ["TheNuclearNexus"]
+license = "MIT"
+readme = "README.md"
+
+homepage = "https://github.com/TheNuclearNexus/bolt-selectors"
+repository = "https://github.com/TheNuclearNexus/bolt-selectors"
+documentation = "https://github.com/TheNuclearNexus/bolt-selectors"
+
+keywords = [
+    "beet",
+    "mecha",
+    "bolt",
+    "minecraft-commands",
+    "mcfunction",
+    "components"
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+beet = ">=0.109.4"
+mecha = ">=0.96.0"
+bolt = "^0.49.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-insta = "^0.3.0"
+lectern = "^0.34.0"
+python-semantic-release = "^7.33.0"
+black = "^24.10.0"
+isort = "^6.0.0"
+
+[tool.isort]
+profile = "black"
+
+[tool.semantic_release]
+branch = "main"
+version_variable = ["bolt_selectors/__init__.py:__version__"]
+version_toml = "pyproject.toml:tool.poetry.version"
+major_on_zero = false
+build_command = "poetry build"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
