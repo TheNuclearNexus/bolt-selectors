@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2025-01-30)
+
+### Fix
+
+* Selector.score() was typed incorrectly ([`4cdf515`](https://github.com/TheNuclearNexus/bolt-selectors/commit/4cdf5151fa972bc9485830062ea98a88ceab2fb2))
+
 ## v0.2.0 (2025-01-29)
 
 ### Feature
