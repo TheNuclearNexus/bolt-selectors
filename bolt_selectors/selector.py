@@ -232,7 +232,9 @@ class Selector:
 
         return self
 
-    def score(self, objective: str, value: ExactOrRangeArgument[int] | None):
+    def score(
+        self, objective: str, value: ExactOrRangeArgument[int] | None
+    ) -> "Selector":
         if value is None:
             del self.scores[objective]
         else:
