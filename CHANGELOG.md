@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2025-02-01)
+
+### Feature
+
+* Allow interpolation in selector literals ([`2414991`](https://github.com/TheNuclearNexus/bolt-selectors/commit/24149914fbf0b9248f88e3284d47d60b22545c36))
+
 ## v0.2.1 (2025-01-30)
 
 ### Fix
