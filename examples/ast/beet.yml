@@ -1,0 +1,13 @@
+data_pack:
+  load:
+    - data/test/functions/foo.mcfunction: ./foo.mcfunction
+
+pipeline:
+  - mecha
+
+require:
+  - bolt
+  - bolt_selectors
+  - mecha.contrib.debug_ast
+
+output: .build 
