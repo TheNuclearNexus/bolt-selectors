@@ -1,0 +1,16 @@
+data_pack:
+  load:
+    - data/test/modules/entry.bolt: ./entry.bolt
+
+pipeline:
+  - mecha
+
+require:
+  - bolt
+  - bolt_selectors
+
+output: .build 
+
+meta:
+  bolt:
+    entrypoint: test:entry

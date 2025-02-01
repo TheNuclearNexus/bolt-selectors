@@ -1,0 +1,9 @@
+function test:foo:
+    self = @s
+    tellraw self "hi"
+
+    prefix = "foobar"
+
+    cows = @e[type=minecraft:cow,tag=(prefix + ".test")]
+    kill cows
+

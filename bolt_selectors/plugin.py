@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Generator, Optional
 from beet import Context
-from mecha import AlternativeParser, AstNode, AstSelector, Mecha, Parser
-from bolt import Runtime
+from mecha import AlternativeParser, AstNode, AstSelector, Mecha, Parser, Visitor, rule
+from bolt import Accumulator, Runtime, visit_generic
 
-from bolt import AstValue, InterpolationParser, Runtime
+from bolt import InterpolationParser, Runtime
 
 from nbtlib import (
     Compound,
@@ -56,6 +56,10 @@ class SelectorConverter:
         return self.base_converter(obj, node)
 
 
+@dataclass(frozen=True, slots=True)
+class AstSelectorLiteral(AstSelector): ...
+
+
 @dataclass
 class SelectorParser:
 
@@ -67,21 +71,40 @@ class SelectorParser:
             # Try to parse literal as a selector
             node: AstSelector = self.selector_parser(stream)
 
-            # If it was successful, convert to a Selector object
-            selector = ast_to_selector(node)
-
             commit()
-            return set_location(AstValue(value=selector), stream.current)
+            return set_location(
+                AstSelectorLiteral(variable=node.variable, arguments=node.arguments),
+                node,
+            )
+
         return self.literal_parser(stream)
+
+
+class SelectorCodegen(Visitor):
+    @rule(AstSelectorLiteral)
+    def literal_selector(
+        self, node: AstSelectorLiteral, acc: Accumulator
+    ) -> Generator[AstNode, Optional[List[str]], Optional[List[str]]]:
+        # This takes the AstSelectorLiteral node, generates all the code
+        # for interpolating the arguments, then returns the name of
+        # the variable holding the interpolated AstSelectorLiteral object
+        result = yield from visit_generic(node, acc)
+
+        # Just use the original node if there are no interpolations
+        if result is None:
+            result = acc.make_ref(node)
+
+        # Generates the code for calling the function that converts
+        # the ast node into a Selector object
+        result = acc.helper("ast_to_selector", result)
+
+        # Returns the Selector object
+        return [result]
 
 
 def beet_default(ctx: Context):
     mc = ctx.inject(Mecha)
     runtime = ctx.inject(Runtime)
-
-    # Make Selector and NBT types globally available due to limitations with AstValue
-    runtime.globals.update({"Selector": Selector})
-    runtime.globals.update({t.__name__: t for t in NBT_GLOBALS})
 
     # Override the bolt:literal parser to enable selectors
     mc.spec.parsers["bolt:literal"] = SelectorParser(
@@ -93,6 +116,10 @@ def beet_default(ctx: Context):
     mc.spec.parsers["selector"] = AlternativeParser(
         [mc.spec.parsers["selector"], InterpolationParser("selector")]
     )
+
+    # Extends codegen to generate Selector objects from the ast
+    runtime.modules.codegen.extend(SelectorCodegen())
+    runtime.helpers["ast_to_selector"] = ast_to_selector
 
     # Patch entity interpolation to support handling Selector objects
     runtime.helpers["interpolate_entity"] = SelectorConverter(
