@@ -1,48 +1,59 @@
-[tool.poetry]
+[project]
 name = "bolt-selectors"
 version = "0.3.0"
 description = "A library that allows selectors to be manipulated in a pythonic way"
-authors = ["TheNuclearNexus"]
-license = "MIT"
+authors = [{ name = "TheNuclearNexus" }]
+requires-python = ">=3.14,<4"
 readme = "README.md"
-
-homepage = "https://github.com/TheNuclearNexus/bolt-selectors"
-repository = "https://github.com/TheNuclearNexus/bolt-selectors"
-documentation = "https://github.com/TheNuclearNexus/bolt-selectors"
-
+license = "MIT"
 keywords = [
     "beet",
     "mecha",
     "bolt",
     "minecraft-commands",
     "mcfunction",
-    "components"
+    "components",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = ["beet>=0.113.0", "mecha>=0.102.0", "bolt>=0.50.0"]
+
+[project.urls]
+Homepage = "https://github.com/TheNuclearNexus/bolt-selectors"
+Repository = "https://github.com/TheNuclearNexus/bolt-selectors"
+Documentation = "https://github.com/TheNuclearNexus/bolt-selectors"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4,<9",
+    "pytest-insta>=0.3.0,<0.4",
+    "lectern>=0.34.0,<0.35",
+    "python-semantic-release>=7.33.0,<8",
+    "black>=24.10.0,<25",
+    "isort>=6.0.0,<7",
+    "numpy==2.4.1",                       # Needed only to help version resolution w/ nbtlib
 ]
 
-[tool.poetry.dependencies]
-python = "^3.14"
-beet = ">=0.113.0"
-mecha = ">=0.102.0"
-bolt = ">=0.50.0"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
-pytest-insta = "^0.3.0"
-lectern = "^0.34.0"
-python-semantic-release = "^7.33.0"
-black = "^24.10.0"
-isort = "^6.0.0"
 
 [tool.isort]
 profile = "black"
 
+
 [tool.semantic_release]
-branch = "main"
-version_variable = ["bolt_selectors/__init__.py:__version__"]
-version_toml = "pyproject.toml:tool.poetry.version"
 major_on_zero = false
-build_command = "poetry build"
+build_command = "uv build"
+
+version_variables = ["src/bolt_selectors/__init__.py:__version__"]
+version_toml = ["pyproject.toml:project.version"]
+commit_author = "github-actions <action@github.com>"
+
+[tool.semantic_release.publish]
+# This ensures it uses the build_command defined above
+dist_glob_patterns = ["dist/*"]
+upload_to_vcs_release = true
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
