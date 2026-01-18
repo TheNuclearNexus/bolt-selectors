@@ -41,7 +41,7 @@ function test:foo:
     print(self)
 
     give self stick
-    
+    ua
     self.limit_to(None)
 
 
