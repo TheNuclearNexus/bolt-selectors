@@ -1,6 +1,6 @@
 [project]
 name = "bolt-selectors"
-version = "0.3.0"
+version = "0.4.0"
 description = "A library that allows selectors to be manipulated in a pythonic way"
 authors = [{ name = "TheNuclearNexus" }]
 requires-python = ">=3.14,<4"
