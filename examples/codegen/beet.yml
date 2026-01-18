@@ -1,7 +1,6 @@
-
 data_pack:
   load:
-    - data/test/modules/entry.bolt: ./entry.bolt
+    - data/test/functions/foo.mcfunction: ./foo.mcfunction
 
 pipeline:
   - mecha
@@ -9,9 +8,6 @@ pipeline:
 require:
   - bolt
   - bolt_selectors
+  - bolt.contrib.debug_codegen
 
 output: .build 
-
-meta:
-  bolt:
-    entrypoint: test:entry

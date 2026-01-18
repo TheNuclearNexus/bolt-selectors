@@ -1,12 +1,16 @@
-from contextlib import contextmanager
 
-function test:foo:
-    self = @s[
+# this should not be affected
+if entity @e[type=armor_stand]
+
+entity = "minecraft:zombie"
+dist = 5
+
+self = @s[
     x=0,
     y=0,
     z=0,
 
-    distance=..1,
+    distance=(None, dist),
 
     dx=1,
     dy=1,
@@ -16,15 +20,24 @@ function test:foo:
     y_rotation=90..,
 
     scores={foo=1,bar=..1,baz=1..},
+
     tag=foo.bar.baz,
     tag=!foo.baz.bar,
+
     team=fooBar,
+    team=!fooBaz,
 
     name=BazBarFoo,
-    type=zombie,
+    name=!BarFooBaz,
+
+    type=entity,
+    type=!skeleton,
+
     predicate=./foo,
+    predicate=!./bar,
 
     nbt={Health:20f},
+    nbt=!{Health:19f},
 
     level=1..,
     gamemode=!adventure,
@@ -35,15 +48,8 @@ function test:foo:
     },
 
     limit=1,
-    sort=nearest,
+    sort=nearest
+]
 
-    ]
-    print(self)
-
-    give self stick
-    ua
-    self.limit_to(None)
-
-
-    give self diamond
+give self stick
 

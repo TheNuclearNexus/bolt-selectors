@@ -1,0 +1,10 @@
+function test:foo:
+    a = @e[type=!zombie, distance=1..4]
+    b = @s[type=!skeleton, distance=2..6]
+
+    c = a | b
+
+    give a diamond
+    give b emerald
+    give c netherite_ingot
+

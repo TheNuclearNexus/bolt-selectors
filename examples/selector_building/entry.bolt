@@ -1,0 +1,7 @@
+function test:foo:
+    self = @e
+
+    self.type("zombie").sorted_by("nearest").limit_to(1)
+ 
+    give self stick
+
