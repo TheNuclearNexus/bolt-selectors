@@ -1,6 +1,5 @@
 from dataclasses import fields
 from functools import partial
-from mecha import AstNode, AstSelector, AstSelectorArgument, AstString
 from tokenstream import set_location
 from .selector import Selector
 from .types import ExactOrRangeArgument

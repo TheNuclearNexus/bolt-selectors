@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Generator, Optional
 from beet import Context
 from mecha import AlternativeParser, AstNode, AstSelector, Mecha, Parser, Visitor, rule
-from bolt import Accumulator, Runtime, visit_generic
+from bolt import Accumulator, visit_generic
 
 from bolt import InterpolationParser, Runtime
 
@@ -62,7 +62,6 @@ class AstSelectorLiteral(AstSelector): ...
 
 @dataclass
 class SelectorParser:
-
     literal_parser: Parser
     selector_parser: Parser
 

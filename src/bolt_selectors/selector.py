@@ -89,14 +89,16 @@ def union_scores(
     return new_scores
 
 
-def union_advancements(a: dict[str, bool | dict[str]], b: dict[str, bool | dict[str]]):
+def union_advancements(
+    a: dict[str, bool | dict[str, Any]], b: dict[str, bool | dict[str, Any]]
+):
     new_advancements = {}
 
     for path in a:
         if path in b:
             if a[path] == b[path]:
                 new_advancements[path] = a[path]
-            elif a[path] == True or b[path] == True:
+            elif a[path] or b[path]:
                 new_advancements[path] = True
             elif isinstance(a[path], bool) or isinstance(b[path], bool):
                 new_advancements[path] = a[path] or b[path]
@@ -190,7 +192,8 @@ class Selector:
         return f"{self.__class__.__name__}({field_str})"
 
     def positioned(
-        self, value: tuple[int | float, int | float, int | float] | None
+        self,
+        value: tuple[int | float, int | float, int | float] | tuple[None, ...] | None,
     ) -> "Selector":
         if value is None:
             value = (None, None, None)
@@ -202,7 +205,8 @@ class Selector:
         return self
 
     def bounded(
-        self, value: tuple[int | float, int | float, int | float] | None
+        self,
+        value: tuple[int | float, int | float, int | float] | tuple[None, ...] | None,
     ) -> "Selector":
         if value is None:
             value = (None, None, None)
@@ -221,6 +225,7 @@ class Selector:
         self,
         value: (
             tuple[ExactOrRangeArgument[int | float], ExactOrRangeArgument[int | float]]
+            | tuple[None, ...]
             | None
         ),
     ) -> "Selector":
@@ -235,9 +240,14 @@ class Selector:
     def score(
         self, objective: str, value: ExactOrRangeArgument[int] | None
     ) -> "Selector":
+
         if value is None:
-            del self.scores[objective]
+            if self.scores is not None:
+                del self.scores[objective]
         else:
+            if self.scores is None:
+                self.scores = {}
+
             self.scores[objective] = value
 
         return self
@@ -254,48 +264,68 @@ class Selector:
             return self
 
         if (not state, value) in values:
-            values.remove(not state, value)
+            values.remove((not state, value))
 
         values.add((state, value))
 
         return self
 
     def tag(self, tag: str, state: bool | None = False) -> "Selector":
+        if self.tags is None:
+            self.tags = set()
+
         return self._toggle_value(tag, state, self.tags)
 
     def team(self, team: str, state: bool | None = False) -> "Selector":
+        if self.teams is None:
+            self.teams = set()
         return self._toggle_value(team, state, self.teams)
 
     def name(self, name: str, state: bool | None = False) -> "Selector":
+        if self.names is None:
+            self.names = set()
         return self._toggle_value(name, state, self.names)
 
     def type(self, type: str, state: bool | None = False) -> "Selector":
+        if self.types is None:
+            self.types = set()
         return self._toggle_value(type, state, self.types)
 
     def predicate(self, predicate: str, state: bool | None = False) -> "Selector":
+        if self.predicates is None:
+            self.predicates = set()
         return self._toggle_value(predicate, state, self.predicates)
 
     def nbt(self, nbt: Compound, state: bool | None = False) -> "Selector":
+        if self.nbts is None:
+            self.nbts = []
         return self._toggle_value(nbt, state, self.nbts)
 
     def at_level(self, value: ExactOrRangeArgument[int] | None) -> "Selector":
+        if self.tags is None:
+            self.tags = set()
         self.level = value
         return self
 
     def gamemode(self, gamemode: str, state: bool | None = False) -> "Selector":
+        if self.gamemodes is None:
+            self.gamemodes = set()
         return self._toggle_value(gamemode, state, self.gamemodes)
 
     def advancement(
-        self, advancement: str, state: bool | dict[str, bool | None] | None
+        self, advancement: str, state: bool | dict[str, bool] | None
     ) -> "Selector":
         if state is None:
-            if advancement in self.advancements:
+            if self.advancements is not None and advancement in self.advancements:
                 del self.advancements[advancement]
             return self
 
-        if not (cur_value := self.advancements.get(advancement)) or (
+        if not (cur_value := (self.advancements or {}).get(advancement)) or (
             isinstance(state, bool) or isinstance(cur_value, bool)
         ):
+            if self.advancements is None:
+                self.advancements = {}
+
             self.advancements[advancement] = state
             return self
 
