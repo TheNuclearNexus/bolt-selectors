@@ -25,15 +25,15 @@ Homepage = "https://github.com/TheNuclearNexus/bolt-selectors"
 Repository = "https://github.com/TheNuclearNexus/bolt-selectors"
 Documentation = "https://github.com/TheNuclearNexus/bolt-selectors"
 
+
 [dependency-groups]
 dev = [
-    "pytest>=8.3.4,<9",
-    "pytest-insta>=0.3.0,<0.4",
-    "lectern>=0.34.0,<0.35",
-    "python-semantic-release>=7.33.0,<8",
-    "black>=24.10.0,<25",
-    "isort>=6.0.0,<7",
-    "numpy==2.4.1",                       # Needed only to help version resolution w/ nbtlib
+    "lectern>=0.35.0",
+    "pytest>=9.0.2",
+    "pytest-insta>=0.4.1",
+    "python-semantic-release>=9.21.0",
+    "ruff>=0.14.13",
+    "numpy==2.4.1",                    # Needed only to help version resolution w/ nbtlib
 ]
 
 
