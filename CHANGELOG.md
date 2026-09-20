@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.4.1 (2026-09-20)
+
+### Bug Fixes
+
+- Single item dict getting skipped
+  ([`9d0f7f8`](https://github.com/TheNuclearNexus/bolt-selectors/commit/9d0f7f823d1378adabd7088d2265449b056c2c9f))
+
+
 ## v0.4.0 (2026-01-18)
 
 ### Bug Fixes
@@ -15,6 +23,9 @@
   ([`4cffb89`](https://github.com/TheNuclearNexus/bolt-selectors/commit/4cffb8943a17e1c28ab2c66f18228fe2d850e4c5))
 
 ### Chores
+
+- Add readme
+  ([`5372b65`](https://github.com/TheNuclearNexus/bolt-selectors/commit/5372b65f92b2c9f0e76c1aa02deee7f966c15d3a))
 
 - Bump workflow python
   ([`8a13da4`](https://github.com/TheNuclearNexus/bolt-selectors/commit/8a13da44d063468aeda2eaf712ae34b4cf2a516e))
